@@ -2,6 +2,7 @@ import 'package:coffee_shop_managementt/data/models/product_model.dart';
 import 'package:coffee_shop_managementt/main.dart';
 import 'package:coffee_shop_managementt/presentation/controllers/manage_products_controller.dart';
 import 'package:coffee_shop_managementt/presentation/widgets/manage_products/add_product_dialog.dart';
+import 'package:coffee_shop_managementt/presentation/widgets/product_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -46,14 +47,17 @@ class ManageProductsScreen extends StatelessWidget {
                             itemBuilder: (context, index) {
                               final product =
                                   manageProductsController.products[index];
-                              return ListTile(
-                                title: Text(product.name),
-                                subtitle: Text(product.price.toString()),
+                              return ProductTile(
+                                product: product,
                                 trailing: IconButton(
-                                  icon: Icon(Icons.delete),
+                                  icon: const Icon(Icons.delete),
                                   onPressed: () {
-                                    manageProductsController
-                                        .deleteProduct(product.id!);
+                                    if (product.id != null) {
+                                      controller.deleteProduct(product.id!);
+                                    } else {
+                                      Get.snackbar(
+                                          'Error', 'Product ID missing');
+                                    }
                                   },
                                 ),
                               );

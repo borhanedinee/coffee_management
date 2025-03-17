@@ -5,7 +5,6 @@ import 'package:coffee_shop_managementt/domain/repo/product_repo.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final DatabaseHelper dbHelper;
-
   ProductRepositoryImpl(this.dbHelper);
 
   @override
@@ -16,7 +15,6 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<List<Product>> getProducts() async {
     final maps = await dbHelper.getProducts();
-    print(' ya borhann ' + maps.toString());
     return maps.map((map) => Product.fromMap(map)).toList();
   }
 
