@@ -7,7 +7,7 @@ class AppStrings {
   static const String enterQuantityTitle = 'Enter Start Quantity';
   static const String sampleProduct = 'Sample Product';
   static const String quantityLabel = 'Start Quantity';
-  static const String quantityHint = 'Enter quantity';
+  static const String quantityHint = 'Enter start quantity';
   static const String cancel = 'Cancel';
   static const String save = 'Save';
   // empty products

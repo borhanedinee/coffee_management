@@ -23,4 +23,10 @@ class ProductRepositoryImpl implements ProductRepository {
     final result = await dbHelper.deleteProduct(id);
     return result;
   }
+
+  @override
+  Future<List<Product>> searchProducts(String pattern) async {
+    final result = await dbHelper.searchProductsByName(pattern);
+    return result.map((map) => Product.fromMap(map)).toList();
+  }
 }

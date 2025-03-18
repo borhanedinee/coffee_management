@@ -1,6 +1,8 @@
 import 'package:coffee_shop_managementt/core/constants/app_colors.dart';
 import 'package:coffee_shop_managementt/core/constants/text_styles.dart';
+import 'package:coffee_shop_managementt/presentation/controllers/start_day_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 /// Modular search bar with animation and styling
 class CustomSearchBar extends StatefulWidget {
@@ -29,8 +31,12 @@ class _CustomSearchBarState extends State<CustomSearchBar>
   @override
   void dispose() {
     _controller.dispose();
+    searchController.dispose();
     super.dispose();
   }
+
+  StartDayController startDayController = Get.find();
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +61,15 @@ class _CustomSearchBarState extends State<CustomSearchBar>
                 ],
               ),
               child: TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  if (value.isEmpty) {
+                    startDayController.searchPattern = '';
+                    startDayController.clearSearchedProducts();
+                    return;
+                  }
+                  startDayController.searchProducts(value);
+                },
                 decoration: InputDecoration(
                   prefixIcon:
                       const Icon(Icons.search, color: AppColors.primaryColor),

@@ -21,8 +21,8 @@ class AppBindings extends Bindings {
         Get.find<ProductRepository>(),
       ),
     );
-    Get.lazyPut<ManageProductsController>(
-      () => ManageProductsController(
+    Get.put<ManageProductsController>(
+      ManageProductsController(
         Get.find<ProductRepository>(),
       ),
     );

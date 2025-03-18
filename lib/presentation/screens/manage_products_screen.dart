@@ -60,6 +60,8 @@ class ManageProductsScreen extends StatelessWidget {
                                     }
                                   },
                                 ),
+                                onDelete: () => manageProductsController
+                                    .deleteProduct(product.id!),
                               );
                             },
                           ),

@@ -2,11 +2,15 @@
 import 'package:coffee_shop_managementt/core/constants/app_strings.dart';
 import 'package:coffee_shop_managementt/core/constants/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 
 class StartQuantityDialog extends StatelessWidget {
   final TextEditingController controller = TextEditingController();
 
-  StartQuantityDialog({super.key});
+  final String productName;
+
+  StartQuantityDialog({super.key, required this.productName});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +29,7 @@ class StartQuantityDialog extends StatelessWidget {
             Text(AppStrings.enterQuantityTitle,
                 style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: 20),
-            Text(AppStrings.sampleProduct,
-                style: Theme.of(context).textTheme.bodyMedium),
+            Text(productName, style: Theme.of(context).textTheme.bodyMedium),
             const SizedBox(height: 15),
             TextField(
               controller: controller,
@@ -55,7 +58,13 @@ class StartQuantityDialog extends StatelessWidget {
                     final value = controller.text;
                     if (value.isNotEmpty) {
                       final quantity = int.tryParse(value);
-                      if (quantity != null) Navigator.of(context).pop(quantity);
+                      if (quantity != null) {
+                        Navigator.of(context).pop(quantity);
+                      } else {
+                        Get.snackbar('title', 'enter a valid number');
+                      }
+                    } else {
+                      Get.snackbar('title', 'quantity should not be empty');
                     }
                   },
                   child: Text(AppStrings.save),

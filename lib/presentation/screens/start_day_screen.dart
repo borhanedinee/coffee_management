@@ -30,29 +30,67 @@ class StartDayScreen extends StatelessWidget {
                 child: Text(AppStrings.instructionText),
               ),
               const CustomSearchBar(),
-              startDayController.products.isEmpty
-                  ? EmptyStock()
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: startDayController.products.length,
-                        itemBuilder: (context, index) {
-                          final product = startDayController.products[index];
-                          return ProductTile(
-                            product: product,
-                            onTap: () => showDialog(
-                              context: context,
-                              builder: (_) => StartQuantityDialog(),
-                            ).then((value) {
-                              if (value != null) {
-                                print('Start Quantity: $value');
-                                // Optionally update product with new quantity
-                                // controller.updateProduct(product.id!, value);
-                              }
-                            }),
-                          );
-                        },
-                      ),
-                    ),
+              startDayController.isSearchLoading ||
+                      startDayController.isFetchingProducts
+                  ? Center(child: CircularProgressIndicator())
+                  : startDayController.products.isEmpty
+                      ? EmptyStock()
+                      : startDayController.searchPattern == ''
+                          ? Expanded(
+                              child: ListView.builder(
+                                itemCount: startDayController.products.length,
+                                itemBuilder: (context, index) {
+                                  final product =
+                                      startDayController.products[index];
+                                  return ProductTile(
+                                    isFromStartDay: true,
+                                    product: product,
+                                    onTap: () => showDialog(
+                                      context: context,
+                                      builder: (_) => StartQuantityDialog(
+                                        productName: product.name,
+                                      ),
+                                    ).then((value) {
+                                      if (value != null) {
+                                        print('Start Quantity: $value');
+                                        // Optionally update product with new quantity
+                                        // controller.updateProduct(product.id!, value);
+                                      }
+                                    }),
+                                  );
+                                },
+                              ),
+                            )
+                          : startDayController.searchedProducts.isEmpty
+                              ? Center(
+                                  child: Text('No products found'),
+                                )
+                              : Expanded(
+                                  child: ListView.builder(
+                                    itemCount: startDayController
+                                        .searchedProducts.length,
+                                    itemBuilder: (context, index) {
+                                      final product = startDayController
+                                          .searchedProducts[index];
+                                      return ProductTile(
+                                        isFromStartDay: true,
+                                        product: product,
+                                        onTap: () => showDialog(
+                                          context: context,
+                                          builder: (_) => StartQuantityDialog(
+                                            productName: product.name,
+                                          ),
+                                        ).then((value) {
+                                          if (value != null) {
+                                            print('Start Quantity: $value');
+                                            // Optionally update product with new quantity
+                                            // controller.updateProduct(product.id!, value);
+                                          }
+                                        }),
+                                      );
+                                    },
+                                  ),
+                                ),
             ],
           ),
         ),

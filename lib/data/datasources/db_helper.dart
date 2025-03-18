@@ -72,6 +72,16 @@ class DatabaseHelper {
     );
   }
 
+  // New search function
+  Future<List<Map<String, dynamic>>> searchProductsByName(String query) async {
+    final db = await database;
+    return await db.query(
+      'products',
+      where: 'name LIKE ?',
+      whereArgs: ['%$query%'], // Case-insensitive partial match
+    );
+  }
+
   // Close the database (optional, for cleanup)
   Future<void> close() async {
     final db = await database;
