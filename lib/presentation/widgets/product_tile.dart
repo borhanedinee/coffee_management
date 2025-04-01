@@ -6,19 +6,13 @@ class ProductTile extends StatelessWidget {
   final Product product;
   final VoidCallback? onTap; // Optional tap action (e.g., open dialog)
   final VoidCallback? onDelete; // Optional tap action (e.g., open dialog)
-  final Widget? trailing; // Custom trailing widget (e.g., price, button)
-  final TextStyle? titleStyle; // Custom title style
-  final TextStyle? subtitleStyle; // Custom subtitle style
-  final bool isFromStartDay;
+  final bool isFromManageProducts;
 
   const ProductTile({
     super.key,
     required this.product,
     this.onTap,
-    this.trailing,
-    this.titleStyle,
-    this.subtitleStyle,
-    this.isFromStartDay = false,
+    this.isFromManageProducts = false,
     this.onDelete,
   });
 
@@ -39,18 +33,33 @@ class ProductTile extends StatelessWidget {
         ),
         title: Text(
           product.name,
-          style: titleStyle ?? Theme.of(context).textTheme.bodyLarge,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
         subtitle: Text(
           '${product.price.toInt()} DA',
         ),
-        trailing: isFromStartDay
-            ? Text(
-                '${product.startQuantity ?? ''}',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
+        trailing: !isFromManageProducts
+            ? Column(
+                children: [
+                  Text(
+                    product.startQuantity != null
+                        ? 'start quantity : ${product.startQuantity}'
+                        : '',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Text(
+                    product.endQuantity != null
+                        ? 'end quantity : ${product.endQuantity}'
+                        : '',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
               )
             : IconButton(
                 onPressed: onDelete,

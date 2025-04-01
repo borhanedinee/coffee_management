@@ -29,4 +29,26 @@ class ProductRepositoryImpl implements ProductRepository {
     final result = await dbHelper.searchProductsByName(pattern);
     return result.map((map) => Product.fromMap(map)).toList();
   }
+
+  @override
+  Future<void> updateProductStartQuantity(int id, int? quantity) async {
+    await dbHelper.updateProductStartQuantity(id, quantity);
+  }
+
+  @override
+  Future<List<Product>> getProductsThatHasStartQuantity() async {
+    final maps = await dbHelper.getProductsThatHasStartQuantity();
+    return maps.map((map) => Product.fromMap(map)).toList();
+  }
+
+  @override
+  Future<void> updateProductEndQuantity(int id, int? quantity) async {
+    await dbHelper.updateProductEndQuantity(id, quantity);
+  }
+
+  @override
+  Future<List<Product>> productsInSession() async {
+    final maps = await dbHelper.getProductsThatHasStartQuantity();
+    return maps.map((map) => Product.fromMap(map)).toList();
+  }
 }

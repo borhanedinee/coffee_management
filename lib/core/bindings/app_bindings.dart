@@ -1,6 +1,8 @@
 import 'package:coffee_shop_managementt/data/datasources/db_helper.dart';
 import 'package:coffee_shop_managementt/data/repos_imp/product_repo_imp.dart';
 import 'package:coffee_shop_managementt/domain/repo/product_repo.dart';
+import 'package:coffee_shop_managementt/presentation/controllers/end_day_controller.dart';
+import 'package:coffee_shop_managementt/presentation/controllers/home_controller.dart';
 import 'package:coffee_shop_managementt/presentation/controllers/manage_products_controller.dart';
 import 'package:coffee_shop_managementt/presentation/controllers/start_day_controller.dart';
 import 'package:get/get.dart';
@@ -23,6 +25,16 @@ class AppBindings extends Bindings {
     );
     Get.put<ManageProductsController>(
       ManageProductsController(
+        Get.find<ProductRepository>(),
+      ),
+    );
+    Get.put<EndDayController>(
+      EndDayController(
+        Get.find<ProductRepository>(),
+      ),
+    );
+    Get.put<HomeController>(
+      HomeController(
         Get.find<ProductRepository>(),
       ),
     );

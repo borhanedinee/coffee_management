@@ -10,6 +10,7 @@ class AppStrings {
   static const String quantityHint = 'Enter start quantity';
   static const String cancel = 'Cancel';
   static const String save = 'Save';
+  static const String clear = 'Clear';
   // empty products
   static const String emptyProducts = 'Empty products';
   static const String goToAddProducts = 'Go to add Products';
@@ -18,6 +19,17 @@ class AppStrings {
   static const String homeTitle = 'Home';
   static const String homeStartDayCard = 'Start Day Session';
   static const String homeEndDayCard = 'End Day Session';
-  static const String homeManageProductsCard = 'Mnage Products';
+  static const String homeManageProductsCard = 'Manage Products';
   static const String homeViewHistoryCard = 'View History';
+
+  // end day screen
+  static const String endDayTitle = 'End Day Session';
+  static const String endDayInstructionText =
+      'Search for the products in your stock that you have sold today and enter the end quantity for each.';
+  static const String endDayNoProductsFoundText = 'No products found';
+  static const String endDayEndQuantityHint =
+      'Enter end quantity for this product';
+  static const String endDayEnterEndQuantityTitle =
+      'Enter the end quantity for';
+  static const String endDaySubmitButton = 'Submit';
 }

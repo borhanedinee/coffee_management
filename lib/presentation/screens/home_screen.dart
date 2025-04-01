@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:coffee_shop_managementt/core/constants/app_colors.dart';
 import 'package:coffee_shop_managementt/core/constants/app_strings.dart';
+import 'package:coffee_shop_managementt/presentation/controllers/home_controller.dart';
+import 'package:coffee_shop_managementt/presentation/controllers/start_day_controller.dart';
 import 'package:coffee_shop_managementt/presentation/widgets/home/custom_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,9 +13,20 @@ import 'package:coffee_shop_managementt/presentation/screens/manage_products_scr
 import 'package:coffee_shop_managementt/presentation/screens/start_day_screen.dart';
 import 'package:coffee_shop_managementt/presentation/screens/view_history_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   /// {@macro home_screen}
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    Get.find<HomeController>().fetchProductsInSession();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +53,31 @@ class HomeScreen extends StatelessWidget {
                     onTap: () => Get.to(StartDayScreen()),
                   ),
                   const SizedBox(width: 20),
-                  CustomNavigationCard(
-                    title: AppStrings.homeEndDayCard,
-                    gradientColors: [
-                      AppColors.secondryColors,
-                      AppColors.secondryColors.withValues(alpha: .6)
-                    ],
-                    icon: Icons.stop,
-                    onTap: () => Get.to(
-                      const EndDayScreen(),
+                  GetBuilder<HomeController>(
+                    builder: (controller) => CustomNavigationCard(
+                      title: AppStrings.homeEndDayCard,
+                      gradientColors: controller.isThereProductsInSessions
+                          ? [
+                              Colors.red,
+                              Colors.red.withValues(alpha: .4),
+                            ]
+                          : [
+                              Colors.grey,
+                              Colors.grey,
+                            ],
+                      icon: Icons.stop,
+                      onTap: () => controller.isThereProductsInSessions
+                          ? Get.to(
+                              EndDayScreen(),
+                            )
+                          : Get.showSnackbar(
+                              GetSnackBar(
+                                title: 'No products in session',
+                                message:
+                                    'There should be at least one product in session to end day session',
+                                duration: const Duration(seconds: 2),
+                              ),
+                            ),
                     ),
                   ),
                 ],

@@ -2,28 +2,29 @@
 import 'package:coffee_shop_managementt/core/constants/app_strings.dart';
 import 'package:coffee_shop_managementt/core/constants/text_styles.dart';
 import 'package:coffee_shop_managementt/data/models/product_model.dart';
+import 'package:coffee_shop_managementt/presentation/controllers/end_day_controller.dart';
 import 'package:coffee_shop_managementt/presentation/controllers/start_day_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/utils.dart';
 
-class StartQuantityDialog extends StatefulWidget {
+class EndQuantityDialog extends StatefulWidget {
   final Product product;
 
-  StartQuantityDialog({super.key, required this.product});
+  EndQuantityDialog({super.key, required this.product});
 
   @override
-  State<StartQuantityDialog> createState() => _StartQuantityDialogState();
+  State<EndQuantityDialog> createState() => _EndQuantityDialogState();
 }
 
-class _StartQuantityDialogState extends State<StartQuantityDialog> {
+class _EndQuantityDialogState extends State<EndQuantityDialog> {
   final TextEditingController controller = TextEditingController();
-  StartDayController startDayController = Get.find();
+  EndDayController endDayController = Get.find();
 
   @override
   void initState() {
-    if (widget.product.startQuantity != null) {
-      controller.text = widget.product.startQuantity.toString();
+    if (widget.product.endQuantity != null) {
+      controller.text = widget.product.endQuantity.toString();
     }
     super.initState();
   }
@@ -48,7 +49,7 @@ class _StartQuantityDialogState extends State<StartQuantityDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(AppStrings.enterQuantityTitle,
+            Text(AppStrings.endDayEnterEndQuantityTitle,
                 style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: 20),
             Text(widget.product.name,
@@ -63,7 +64,7 @@ class _StartQuantityDialogState extends State<StartQuantityDialog> {
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
-                hintText: AppStrings.quantityHint,
+                hintText: AppStrings.endDayEndQuantityHint,
                 hintStyle: AppTextStyles.hint,
               ),
             ),
@@ -79,40 +80,16 @@ class _StartQuantityDialogState extends State<StartQuantityDialog> {
                 ElevatedButton(
                   onPressed: () {
                     final value = controller.text;
-                    if (value.isNotEmpty) {
-                      final quantity = int.tryParse(value);
-                      if (quantity != null) {
-                        startDayController.updateProductStartQuantity(
-                          widget.product.id!,
-                          quantity,
-                        );
-                        Get.back();
-                      } else {
-                        Get.snackbar('title', 'enter a valid number');
-                      }
-                    } else {
-                      Get.snackbar('title', 'quantity should not be empty');
-                    }
+                    // if value is nul => end quantity is updated to null
+                    final quantity = int.tryParse(value);
+                    endDayController.updateProductEndQuantity(
+                      widget.product.id!,
+                      quantity,
+                    );
+                    Navigator.of(context).pop();
                   },
                   child: Text(AppStrings.save),
                 ),
-                const SizedBox(width: 10),
-                if (widget.product.startQuantity != null)
-                  ElevatedButton(
-                    onPressed: () async {
-                      await startDayController.updateProductStartQuantity(
-                        widget.product.id!,
-                        null,
-                      );
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      AppStrings.clear,
-                      style: TextStyle(
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
               ],
             ),
           ],

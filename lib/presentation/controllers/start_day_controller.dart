@@ -3,6 +3,7 @@ import 'package:coffee_shop_managementt/data/datasources/db_helper.dart';
 import 'package:coffee_shop_managementt/data/models/product_model.dart';
 import 'package:coffee_shop_managementt/data/repos_imp/product_repo_imp.dart';
 import 'package:coffee_shop_managementt/domain/repo/product_repo.dart';
+import 'package:coffee_shop_managementt/presentation/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
 class StartDayController extends GetxController {
@@ -24,7 +25,7 @@ class StartDayController extends GetxController {
       isFetchingProducts = true;
       update();
       await Future.delayed(
-        Duration(seconds: 2),
+        Duration(milliseconds: 300),
       );
 
       final fetchedProducts = await productRepository.getProducts();
@@ -50,7 +51,7 @@ class StartDayController extends GetxController {
       update();
 
       await Future.delayed(
-        Duration(seconds: 2),
+        Duration(milliseconds: 300),
       );
 
       searchedProducts = await productRepository.searchProducts(pattern);
@@ -68,5 +69,17 @@ class StartDayController extends GetxController {
   clearSearchedProducts() {
     searchedProducts.clear();
     update();
+  }
+
+  // update product start quantity
+  updateProductStartQuantity(int id, int? quantity) async {
+    try {
+      await productRepository.updateProductStartQuantity(id, quantity);
+      Get.snackbar('Success', 'Product updated successfully');
+      await Get.find<HomeController>().fetchProductsInSession();
+      await getProducts();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to update product: $e');
+    }
   }
 }

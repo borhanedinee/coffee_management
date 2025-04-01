@@ -43,20 +43,13 @@ class StartDayScreen extends StatelessWidget {
                                   final product =
                                       startDayController.products[index];
                                   return ProductTile(
-                                    isFromStartDay: true,
                                     product: product,
                                     onTap: () => showDialog(
                                       context: context,
                                       builder: (_) => StartQuantityDialog(
-                                        productName: product.name,
+                                        product: product,
                                       ),
-                                    ).then((value) {
-                                      if (value != null) {
-                                        print('Start Quantity: $value');
-                                        // Optionally update product with new quantity
-                                        // controller.updateProduct(product.id!, value);
-                                      }
-                                    }),
+                                    ),
                                   );
                                 },
                               ),
@@ -73,20 +66,13 @@ class StartDayScreen extends StatelessWidget {
                                       final product = startDayController
                                           .searchedProducts[index];
                                       return ProductTile(
-                                        isFromStartDay: true,
                                         product: product,
                                         onTap: () => showDialog(
                                           context: context,
                                           builder: (_) => StartQuantityDialog(
-                                            productName: product.name,
+                                            product: product,
                                           ),
-                                        ).then((value) {
-                                          if (value != null) {
-                                            print('Start Quantity: $value');
-                                            // Optionally update product with new quantity
-                                            // controller.updateProduct(product.id!, value);
-                                          }
-                                        }),
+                                        ),
                                       );
                                     },
                                   ),

@@ -6,4 +6,8 @@ abstract class ProductRepository {
   Future<List<Product>> getProducts();
   Future<List<Product>> searchProducts(String pattern);
   Future<int> deleteProduct(int id);
+  Future<void> updateProductStartQuantity(int id, int? quantity);
+  Future<void> updateProductEndQuantity(int id, int? quantity);
+  Future<List<Product>> getProductsThatHasStartQuantity();
+  Future<List<Product>> productsInSession();
 }

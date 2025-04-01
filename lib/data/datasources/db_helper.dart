@@ -33,7 +33,8 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         price REAL NOT NULL,
-        startQuantity INTEGER NULL
+        startQuantity INTEGER NULL,
+        endQuantity INTEGER NULL
       )
     ''');
   }
@@ -80,6 +81,47 @@ class DatabaseHelper {
       where: 'name LIKE ?',
       whereArgs: ['%$query%'], // Case-insensitive partial match
     );
+  }
+
+  // New function to update startQuantity
+  Future<int> updateProductStartQuantity(int id, int? startQuantity) async {
+    final db = await database;
+    return await db.update(
+      'products',
+      {'startQuantity': startQuantity}, // Null is valid in SQLite for INTEGER
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // New function to fetch products with non-null startQuantity
+  Future<List<Map<String, dynamic>>> getProductsThatHasStartQuantity() async {
+    try {
+      final db = await database;
+      return await db.query(
+        'products',
+        where: 'startQuantity IS NOT NULL',
+      );
+    } catch (e) {
+      print('Error fetching products with start quantity: $e');
+      rethrow;
+    }
+  }
+
+  // New function to update endQuantity
+  Future<int> updateProductEndQuantity(int id, int? endQuantity) async {
+    try {
+      final db = await database;
+      return await db.update(
+        'products',
+        {'endQuantity': endQuantity}, // Null is valid for INTEGER
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      print('Error updating product end quantity: $e');
+      rethrow;
+    }
   }
 
   // Close the database (optional, for cleanup)

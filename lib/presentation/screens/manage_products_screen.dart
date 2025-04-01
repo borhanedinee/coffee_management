@@ -48,18 +48,8 @@ class ManageProductsScreen extends StatelessWidget {
                               final product =
                                   manageProductsController.products[index];
                               return ProductTile(
+                                isFromManageProducts: true,
                                 product: product,
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.delete),
-                                  onPressed: () {
-                                    if (product.id != null) {
-                                      controller.deleteProduct(product.id!);
-                                    } else {
-                                      Get.snackbar(
-                                          'Error', 'Product ID missing');
-                                    }
-                                  },
-                                ),
                                 onDelete: () => manageProductsController
                                     .deleteProduct(product.id!),
                               );
