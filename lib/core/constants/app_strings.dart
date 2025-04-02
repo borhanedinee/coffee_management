@@ -32,4 +32,9 @@ class AppStrings {
   static const String endDayEnterEndQuantityTitle =
       'Enter the end quantity for';
   static const String endDaySubmitButton = 'Submit';
+
+  // history sessions screen
+  static const String historyTitle = 'History Sessions';
+  static const String historyNoSessionsFoundText = 'No sessions found';
+  static const String historySessionDate = 'Session Date';
 }

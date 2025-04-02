@@ -1,4 +1,5 @@
 // lib/data/datasources/database_helper.dart
+import 'package:coffee_shop_managementt/data/models/session_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -35,6 +36,18 @@ class DatabaseHelper {
         price REAL NOT NULL,
         startQuantity INTEGER NULL,
         endQuantity INTEGER NULL
+      )
+    ''');
+    // Create sessions table
+    await db.execute('''
+      CREATE TABLE sessions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        priceInCaisse REAL NOT NULL,
+        priceCalculatedByApp REAL NOT NULL,
+        sessionDate TEXT,
+        period TEXT NOT NULL,
+        status TEXT NOT NULL,
+        toleranceValue REAL NOT NULL
       )
     ''');
   }
@@ -122,6 +135,64 @@ class DatabaseHelper {
       print('Error updating product end quantity: $e');
       rethrow;
     }
+  }
+
+  // SESSIONS
+  // Fetch all sessions
+  Future<List<Map<String, dynamic>>> fetchSessions({
+    DateTime? dateFilter, // Filter by a specific date (ignoring time)
+    String? statusFilter, // Filter by status
+  }) async {
+    final db = await database;
+    if (dateFilter == null && statusFilter == null) {
+      return await db.query('sessions');
+    }
+
+    String? whereClause;
+    List<dynamic> whereArgs = [];
+
+    // Filter by date: Match the date part (yyyy-MM-dd) of sessionDate
+    if (dateFilter != null) {
+      final dateStr =
+          DateTime(dateFilter.year, dateFilter.month, dateFilter.day)
+              .toIso8601String()
+              .substring(0, 10); // e.g., "2025-04-02"
+      whereClause = "DATE(sessionDate) = ?";
+      whereArgs.add(dateStr);
+    }
+
+    // Filter by status
+    if (statusFilter != null) {
+      whereClause =
+          whereClause == null ? 'status = ?' : '$whereClause AND status = ?';
+      whereArgs.add(statusFilter);
+    }
+
+    return await db.query(
+      'sessions',
+      where: whereClause,
+      whereArgs: whereArgs,
+    );
+  }
+
+  // Add a session
+  Future<int> addSession(SessionModel session) async {
+    final db = await database;
+    return await db.insert(
+      'sessions',
+      session.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  // Delete a session by ID
+  Future<int> deleteSession(int sessionID) async {
+    final db = await database;
+    return await db.delete(
+      'sessions',
+      where: 'id = ?',
+      whereArgs: [sessionID],
+    );
   }
 
   // Close the database (optional, for cleanup)

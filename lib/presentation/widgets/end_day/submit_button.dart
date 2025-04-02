@@ -2,7 +2,7 @@ import 'package:coffee_shop_managementt/core/constants/app_colors.dart';
 import 'package:coffee_shop_managementt/core/constants/app_strings.dart';
 import 'package:coffee_shop_managementt/core/services/snackbars.dart';
 import 'package:coffee_shop_managementt/presentation/controllers/end_day_controller.dart';
-import 'package:coffee_shop_managementt/presentation/screens/session_result.dart';
+import 'package:coffee_shop_managementt/presentation/screens/session_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -58,6 +58,7 @@ class SubmitEndDayButton extends StatelessWidget {
   void showPriceRangeDialog(BuildContext context) {
     final _startPriceController = TextEditingController();
     final _endPriceController = TextEditingController();
+    final _toleranceValueController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
     showDialog(
@@ -115,6 +116,26 @@ class SubmitEndDayButton extends StatelessWidget {
                     return null;
                   },
                 ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _toleranceValueController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Tolerance value',
+                    hintText: 'Enter tolerance value',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null) {
+                      return 'tolerance value must not be null';
+                    }
+                    final doubleValue = double.tryParse(value);
+                    if (doubleValue == null || doubleValue < 0) {
+                      return 'return a valid tolerance value number';
+                    }
+                    return null;
+                  },
+                ),
               ],
             ),
           ),
@@ -130,9 +151,14 @@ class SubmitEndDayButton extends StatelessWidget {
                 if (_formKey.currentState!.validate()) {
                   final startPrice = double.parse(_startPriceController.text);
                   final endPrice = double.parse(_endPriceController.text);
+                  final tolerance =
+                      double.parse(_toleranceValueController.text);
                   // Return the values and close dialog
-                  Navigator.of(context)
-                      .pop({'start': startPrice, 'end': endPrice});
+                  Navigator.of(context).pop({
+                    'start': startPrice,
+                    'end': endPrice,
+                    'tolerance': tolerance,
+                  });
                 }
               },
               child: const Text('Submit'),
@@ -145,7 +171,9 @@ class SubmitEndDayButton extends StatelessWidget {
         // Handle the submitted values
         final start = result['start'];
         final end = result['end'];
-        await Get.find<EndDayController>().calculateActualSoldPrice(start, end);
+        final tolerance = result['tolerance'];
+        await Get.find<EndDayController>()
+            .calculateActualSoldPrice(start, end, tolerance);
         Get.to(SessionResultScreen());
       }
     });

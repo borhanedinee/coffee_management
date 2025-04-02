@@ -56,10 +56,12 @@ class EndDayController extends GetxController {
   // calculating day session things
   double actualSoldPrice = 0;
   double soldPrice = 0;
+  double tolerenceValue = 0;
   bool isProcessingEndDay = false;
-  calculateActualSoldPrice(double start, double end) async {
+  calculateActualSoldPrice(double start, double end, double tolerence) async {
     isProcessingEndDay = true;
     soldPrice = end - start;
+    tolerenceValue = tolerence;
     actualSoldPrice = 0;
     update();
 
