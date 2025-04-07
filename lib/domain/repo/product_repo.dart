@@ -10,4 +10,5 @@ abstract class ProductRepository {
   Future<void> updateProductEndQuantity(int id, int? quantity);
   Future<List<Product>> getProductsThatHasStartQuantity();
   Future<List<Product>> productsInSession();
+  Future<void> clearStartAndEndQuantities();
 }

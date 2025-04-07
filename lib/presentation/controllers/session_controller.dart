@@ -1,6 +1,9 @@
 import 'package:coffee_shop_managementt/core/services/snackbars.dart';
+import 'package:coffee_shop_managementt/data/models/daily_sessions_model.dart';
 import 'package:coffee_shop_managementt/data/models/session_model.dart';
 import 'package:coffee_shop_managementt/domain/repo/session_history.dart';
+import 'package:coffee_shop_managementt/presentation/controllers/end_day_controller.dart';
+import 'package:coffee_shop_managementt/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,7 +13,7 @@ class SessionController extends GetxController {
   SessionController(this.sessionRepository);
 
   // PREVIOUS SESSIONS
-  List<SessionModel> previousSessions = [];
+  List<DailySessionsModel> gouppedDailySessions = [];
   bool isFetchingPreviousSessions = false;
   Future<void> fetchPreviousSessions() async {
     try {
@@ -18,7 +21,8 @@ class SessionController extends GetxController {
       update();
       await Future.delayed(Duration(seconds: 3));
 
-      previousSessions = await sessionRepository.fetchPreviousSessions();
+      gouppedDailySessions =
+          await sessionRepository.fetchAndGroupPreviousSessions();
 
       isFetchingPreviousSessions = false;
       update();
@@ -33,6 +37,8 @@ class SessionController extends GetxController {
   void addSession(SessionModel session) {
     try {
       sessionRepository.addSession(session);
+      Get.find<EndDayController>().clearEndDay();
+      Get.offAll(HomeScreen());
       SnackbarService.show(message: 'session added successfully');
     } catch (e) {
       SnackbarService.show(message: 'Error adding a sessions $e');

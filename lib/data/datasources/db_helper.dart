@@ -139,40 +139,39 @@ class DatabaseHelper {
 
   // SESSIONS
   // Fetch all sessions
-  Future<List<Map<String, dynamic>>> fetchSessions({
-    DateTime? dateFilter, // Filter by a specific date (ignoring time)
-    String? statusFilter, // Filter by status
+  Future<List<Map<String, Object?>>> fetchSessions({
+    DateTime? dateFilter,
+    String? statusFilter,
   }) async {
     final db = await database;
-    if (dateFilter == null && statusFilter == null) {
-      return await db.query('sessions');
-    }
 
     String? whereClause;
     List<dynamic> whereArgs = [];
 
-    // Filter by date: Match the date part (yyyy-MM-dd) of sessionDate
     if (dateFilter != null) {
       final dateStr =
           DateTime(dateFilter.year, dateFilter.month, dateFilter.day)
               .toIso8601String()
-              .substring(0, 10); // e.g., "2025-04-02"
+              .substring(0, 10);
       whereClause = "DATE(sessionDate) = ?";
       whereArgs.add(dateStr);
     }
 
-    // Filter by status
     if (statusFilter != null) {
       whereClause =
           whereClause == null ? 'status = ?' : '$whereClause AND status = ?';
       whereArgs.add(statusFilter);
     }
 
-    return await db.query(
+    // Fetch all sessions with the applied filters
+    final sessionMaps = await db.query(
       'sessions',
       where: whereClause,
       whereArgs: whereArgs,
+      orderBy: 'sessionDate DESC', // Sort by date descending
     );
+
+    return sessionMaps;
   }
 
   // Add a session
@@ -192,6 +191,18 @@ class DatabaseHelper {
       'sessions',
       where: 'id = ?',
       whereArgs: [sessionID],
+    );
+  }
+
+  // Clear start quantities for all products
+  Future<void> clearStartAndEndQuantities() async {
+    final db = await database;
+    await db.update(
+      'products',
+      {
+        'startQuantity': null,
+        'endQuantity': null,
+      }, // Set startQuantity to null
     );
   }
 

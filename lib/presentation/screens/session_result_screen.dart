@@ -70,18 +70,24 @@ class SessionResultScreen extends StatelessWidget {
                     Get.find<SessionController>().addSession(session);
                   } else {
                     SnackbarService.show(
-                        message: 'Nothing has returned from dialog');
+                      message: 'Nothing has returned from dialog',
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.indigo,
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 child: const Text(
                   'Save and Close',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],

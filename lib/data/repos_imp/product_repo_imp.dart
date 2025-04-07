@@ -51,4 +51,9 @@ class ProductRepositoryImpl implements ProductRepository {
     final maps = await dbHelper.getProductsThatHasStartQuantity();
     return maps.map((map) => Product.fromMap(map)).toList();
   }
+
+  @override
+  Future<void> clearStartAndEndQuantities() {
+    return dbHelper.clearStartAndEndQuantities();
+  }
 }

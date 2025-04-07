@@ -78,6 +78,22 @@ class EndDayController extends GetxController {
     update();
   }
 
+  clearStartAndEndQuantities() {
+    productRepository.clearStartAndEndQuantities();
+  }
+
+  clearEndDay() {
+    clearStartAndEndQuantities();
+    productsWithStartQuantity.clear();
+    isSubmitButtonClickable = false;
+    actualSoldPrice = 0;
+    soldPrice = 0;
+    tolerenceValue = 0;
+    isProcessingEndDay = false;
+
+    update();
+  }
+
   // start price
   // end price
   // seen sold price = start - end
